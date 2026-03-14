@@ -1,0 +1,86 @@
+# SPDX-FileCopyrightText: Tobias Knöppler <thecalcaholic@web.de>
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+      - "test*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: fulltextsearch_opensearch
+    - name: Verify correct versions
+      working-directory: ./fulltextsearch_opensearch
+      run: |
+        set -eu
+        VERSION="${GITHUB_REF##*/}"
+        if [[ "$VERSION" =~ ^test ]]
+        then
+          exit 0
+        fi
+        grep "<version>${VERSION?}</version>" appinfo/info.xml || {
+          echo "appinfo/info.xml: version does not match git tag ($VERSION)"
+          exit 1
+        }
+        #jq '.version' < package.json | grep "^$VERSION\$" || {
+        #  echo "package.json: version does not match git tag ($VERSION)"
+        #  exit 1
+        #}
+        
+        echo "Version check successful"
+    - name: Set up php 8.3
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.3
+        tools: phpunit
+        extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql
+        coverage: none
+
+    #- name: Read package.json node and npm engines version
+    #  uses: skjnldsv/read-package-engines-version-actions@v1.2
+    #  id: versions
+    #  with:
+    #    fallbackNode: '^24'
+    #    fallbackNpm: '^11'
+    #    path: './fulltextsearch_opensearch'
+
+    #- name: Set up node ${{ steps.versions.outputs.nodeVersion }}
+    #  uses: actions/setup-node@v3
+    #  with:
+    #    node-version: ${{ steps.versions.outputs.nodeVersion }}
+    #- name: Build app
+    #  working-directory: ./fulltextsearch_opensearch
+    #  run: |
+    #    npm install --dev
+    #    make build
+    - name: "Create release"
+      run: |
+        set -x
+        # TODO: replace with make all once linter is fixed
+        make vendor
+        make scoper
+        mkdir fulltextsearch_opensearch
+        mv appinfo js lib LICENSES templates LICENSE fulltextsearch_opensearch/
+        tar -caf fulltextsearch_opensearch.tar.gz fulltextsearch_opensearch
+        sha256sum fulltextsearch_opensearch.tar.gz > fulltextsearch_opensearch.sha256
+        tag_name="${GITHUB_REF##*/}"
+        description="$(git tag -n10 --format="%(contents)" "$tag_name")"
+        gh release create --draft -t "${tag_name?}" -F - "${tag_name?}" <<EOF
+        ${description}
+        EOF
+        for asset in fulltextsearch_opensearch.{tar.gz,sha256}
+        do
+          gh release upload "${tag_name?}" "${asset?}"
+        done
+
+      working-directory: ./fulltextsearch_opensearch
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
