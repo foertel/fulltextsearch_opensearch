@@ -1,0 +1,4 @@
+AGENTS.md
+/vendor/
+/vendor-bin/
+composer.lock

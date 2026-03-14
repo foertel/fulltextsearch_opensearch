@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+  - SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+	<id>fulltextsearch_opensearch</id>
+	<name>Full text search - OpenSearch Platform</name>
+	<summary>Index using OpenSearch</summary>
+	<description><![CDATA[
+
+Extension to the _Full text search_ app to communicate with OpenSearch.
+
+]]>
+	</description>
+	<version>1.0.0</version>
+	<licence>agpl</licence>
+	<author>Nextcloud contributors</author>
+	<namespace>FullTextSearch_OpenSearch</namespace>
+	<category>search</category>
+	<dependencies>
+		<nextcloud min-version="32" max-version="33"/>
+	</dependencies>
+
+	<commands>
+		<command>OCA\FullTextSearch_OpenSearch\Command\Configure</command>
+	</commands>
+
+	<settings>
+		<admin>OCA\FullTextSearch_OpenSearch\Settings\Admin</admin>
+	</settings>
+
+	<fulltextsearch>
+		<platform>OCA\FullTextSearch_OpenSearch\Platform\OpenSearchPlatform</platform>
+	</fulltextsearch>
+
+</info>

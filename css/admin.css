@@ -1,0 +1,106 @@
+/**
+ * SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+/* Status panel */
+.opensearch-status-panel {
+	margin-bottom: 20px;
+	padding: 10px 0;
+	border-bottom: 1px solid var(--color-border, #ededed);
+}
+
+.opensearch-status-panel h3 {
+	margin-top: 0;
+	margin-bottom: 10px;
+}
+
+.status-row {
+	display: flex;
+	align-items: center;
+	margin-bottom: 6px;
+	gap: 8px;
+}
+
+.status-label {
+	font-weight: bold;
+	min-width: 80px;
+}
+
+.status-badge {
+	display: inline-block;
+	padding: 2px 10px;
+	border-radius: 10px;
+	font-size: 12px;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: #fff;
+}
+
+.status-green {
+	background-color: #46ba61;
+}
+
+.status-yellow {
+	background-color: #e9a820;
+}
+
+.status-red {
+	background-color: #e9322d;
+}
+
+.status-grey {
+	background-color: #969696;
+}
+
+.status-text-red {
+	color: #e9322d;
+	font-weight: bold;
+}
+
+.status-errors {
+	/* base style, .status-text-red added dynamically */
+}
+
+/* Progress bar */
+.progress-bar-outer {
+	flex: 1;
+	max-width: 300px;
+	height: 16px;
+	background-color: var(--color-background-dark, #ededed);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.progress-bar-inner {
+	height: 100%;
+	background-color: #46ba61;
+	border-radius: 8px;
+	transition: width 0.3s ease;
+	min-width: 0;
+}
+
+/* Settings table */
+.div-table {
+	display: table;
+	width: 100%;
+}
+
+.div-table-row {
+	display: table-row;
+}
+
+.div-table-col {
+	display: table-cell;
+	padding: 8px 4px;
+	vertical-align: top;
+}
+
+.div-table-col-left {
+	width: 300px;
+}
+
+.div-table-col input[type="text"] {
+	width: 100%;
+	max-width: 400px;
+}
